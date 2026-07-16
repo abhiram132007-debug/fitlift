@@ -3,7 +3,7 @@
 // Its job: draw the screen, and talk to the backend API using fetch().
 // The backend (server.js) is the only thing that touches the database.
 
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = 'https://fitlift.onrender.com';
 
 // ---------- simple app state ----------
 let token = localStorage.getItem('fitlift_token') || null;
