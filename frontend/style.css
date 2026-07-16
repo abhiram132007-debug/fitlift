@@ -6,18 +6,23 @@
    ========================================================================== */
 :root {
   /* Base palette - dark theme */
-  --bg: #000000;              /* near-black, deeper than Charcoal */
-  --bg-elevated: #0d161f;     /* Charcoal - card surfaces */
-  --text: #fafaf7;            /* Fog - main text */
-  --text-dim: #000000;        /* muted Fog */
-  --accent: #000000;          /* brightened Slate Blue - pops on black */
+  --bg: #1a1917;              /* near-black, deeper than Charcoal */
+  --bg-elevated: #2E2C26;     /* Charcoal - card surfaces */
+  --text: #E2DECE;            /* Fog - main text (light on dark) */
+  --text-dim: #a8a394;        /* muted Fog - secondary text */
+  --accent: #6d8ba3;          /* brightened Slate Blue - pops on black */
   --accent-hover: #85a0b6;
-  --accent-2: #be87ee;        /* brightened Aloe - pops on black */
-  --accent-2-hover: #afe624;
+  --accent-2: #8f9975;        /* brightened Aloe - pops on black */
+  --accent-2-hover: #a3ac8d;
   --border: #3d3b34;          /* subtle border on black */
 
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   --gradient-accent: linear-gradient(135deg, #3D4F5A 0%, #73795D 100%);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
 }
 
 body {
