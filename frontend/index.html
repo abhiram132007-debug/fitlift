@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FITLIFT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="wordmark" data-nav="feed">FIT<span>LIFT</span></div>
+      <nav class="nav-links">
+        <button data-nav="feed" class="nav-btn">Feed</button>
+        <button data-nav="leaderboard" class="nav-btn">Leaderboard</button>
+        <button data-nav="new-post" class="nav-btn" id="nav-new-post" hidden>Post a Lift</button>
+      </nav>
+      <div class="auth-area" id="auth-area">
+        <!-- filled in by app.js: either Log in / Sign up, or the user's name -->
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ===== FEED ===== -->
+    <section id="view-feed" class="view">
+      <div class="view-header">
+        <h1>The Feed</h1>
+        <div class="sort-toggle">
+          <button class="sort-btn active" data-sort="new">Newest</button>
+          <button class="sort-btn" data-sort="top">Top Points</button>
+        </div>
+      </div>
+      <div id="feed-list" class="post-list"><p class="muted">Loading lifts&hellip;</p></div>
+    </section>
+
+    <!-- ===== LEADERBOARD ===== -->
+    <section id="view-leaderboard" class="view" hidden>
+      <div class="view-header"><h1>Leaderboard</h1></div>
+      <table class="board-table">
+        <thead>
+          <tr><th>Rank</th><th>Lifter</th><th>Points</th><th>Lifts posted</th></tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+    </section>
+
+    <!-- ===== NEW POST ===== -->
+    <section id="view-new-post" class="view" hidden>
+      <div class="view-header"><h1>Post a Lift</h1></div>
+      <form id="post-form" class="stack-form">
+        <label>Lift
+          <select name="lift_name" required>
+            <option value="Squat">Squat</option>
+            <option value="Bench Press">Bench Press</option>
+            <option value="Deadlift">Deadlift</option>
+            <option value="Overhead Press">Overhead Press</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+        <div class="two-col">
+          <label>Weight lifted (kg)
+            <input type="number" name="weight_kg" min="1" step="0.5" required />
+          </label>
+          <label>Reps
+            <input type="number" name="reps" min="1" step="1" value="1" required />
+          </label>
+        </div>
+        <label>Image URL <span class="muted">(optional - link to a photo/video thumbnail)</span>
+          <input type="url" name="image_url" placeholder="https://..." />
+        </label>
+        <label>Caption
+          <textarea name="caption" rows="3" placeholder="New PR, felt heavy but clean."></textarea>
+        </label>
+        <p class="hint" id="post-preview-hint"></p>
+        <button type="submit" class="btn-primary">Post Lift</button>
+        <p class="form-error" id="post-error"></p>
+      </form>
+    </section>
+
+    <!-- ===== PROFILE ===== -->
+    <section id="view-profile" class="view" hidden>
+      <div id="profile-content"></div>
+    </section>
+
+    <!-- ===== AUTH ===== -->
+    <section id="view-auth" class="view" hidden>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-authtab="login">Log In</button>
+          <button class="auth-tab" data-authtab="signup">Sign Up</button>
+        </div>
+
+        <form id="login-form" class="stack-form">
+          <label>Username <input type="text" name="username" required /></label>
+          <label>Password <input type="password" name="password" required /></label>
+          <button type="submit" class="btn-primary">Log In</button>
+          <p class="form-error" id="login-error"></p>
+        </form>
+
+        <form id="signup-form" class="stack-form" hidden>
+          <label>Username <input type="text" name="username" required /></label>
+          <label>Password <span class="muted">(6+ characters)</span><input type="password" name="password" required /></label>
+          <label>Bodyweight (kg) <input type="number" name="bodyweight_kg" min="20" step="0.1" required /></label>
+          <button type="submit" class="btn-primary">Create Account</button>
+          <p class="form-error" id="signup-error"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- reusable template for one post card, filled in by JS -->
+  <template id="post-card-template">
+    <article class="post-card">
+      <header class="post-card-head">
+        <button class="avatar" data-goto-profile></button>
+        <div class="post-card-headtext">
+          <button class="username-link" data-goto-profile></button>
+          <span class="post-time"></span>
+        </div>
+        <div class="points-stamp"><span class="points-num"></span><span class="points-label">PTS</span></div>
+      </header>
+
+      <div class="lift-line">
+        <span class="lift-name"></span>
+        <span class="lift-weight"></span>
+      </div>
+
+      <div class="ratio-gauge">
+        <svg viewBox="0 0 200 28" class="barbell-svg">
+          <line x1="10" y1="14" x2="190" y2="14" class="bar-rail" />
+          <g class="plates-fill"></g>
+          <circle cx="10" cy="14" r="8" class="bar-end" />
+          <circle cx="190" cy="14" r="8" class="bar-end" />
+        </svg>
+        <span class="ratio-label"></span>
+      </div>
+
+      <img class="post-image" hidden />
+      <p class="post-caption"></p>
+
+      <footer class="vote-row">
+        <button class="vote-btn up" data-vote="1">▲</button>
+        <span class="vote-total">0</span>
+        <button class="vote-btn down" data-vote="-1">▼</button>
+        <button class="delete-btn" hidden>Delete</button>
+      </footer>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
